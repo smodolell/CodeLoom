@@ -1,0 +1,17 @@
+﻿FileName:ENUMS.md
+Paths:docs
+
+# Enumeraciones
+
+{% for enum in context.Enums %}
+
+## {{ enum.Name }}
+
+| Valor | Nombre | Descripción |
+|-------|--------|-------------|
+{% for value in enum.Values -%}
+| `{{ value.Value }}` | `{{ value.Name }}` | {{ value.DisplayName | default: value.Name }} |
+{% endfor %}
+
+---
+{% endfor %}

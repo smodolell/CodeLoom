@@ -1,0 +1,49 @@
+﻿FileName:README.md
+Paths:docs
+
+# {{ context.SolutionName }} - Documentación
+
+> Documentación automática generada el {{ "now" | date: "yyyy-MM-dd HH:mm" }}
+
+## 📊 Resumen del Sistema
+
+| Métrica | Valor |
+|---------|-------|
+| **Entidades** | {{ context.Entities.size }} |
+| **Enumeraciones** | {{ context.Enums.size }} |
+| **Relaciones** | {{ context.Relationships.size }} |
+| **Versión** | {{ context.AssemblyVersion }} |
+
+## 🏗️ Arquitectura del Dominio
+
+### Entidades Principales
+
+{% for entity in context.Entities -%}
+- **[{{ entity.Name }}](ENTITIES.md#{{ entity.Name | downcase }})** - `{{ entity.TableName }}` (PK: `{{ entity.PrimaryKey }}`)
+{% endfor %}
+
+### Enumeraciones
+
+{% for enum in context.Enums -%}
+- **[{{ enum.Name }}](ENUMS.md#{{ enum.Name | downcase }})** - {{ enum.Values.size }} valores
+{% endfor %}
+
+## 📁 Estructura de Documentación
+
+- [**Entidades**](ENTITIES.md) - Documentación detallada de todas las entidades
+- [**Enumeraciones**](ENUMS.md) - Catálogo de enums y sus valores  
+- [**Esquema de BD**](DATABASE.md) - Diagrama y relaciones de base de datos
+- [**API**](API.md) - Endpoints y contratos (si aplica)
+
+## 🔗 Relaciones por Tipo
+
+| Tipo | Cantidad |
+|------|----------|
+| **One-to-Many** | {{ context.Relationships | where: "Type", "OneToMany" | size }} |
+| **Many-to-One** | {{ context.Relationships | where: "Type", "ManyToOne" | size }} |
+| **One-to-One** | {{ context.Relationships | where: "Type", "OneToOne" | size }} |
+
+## 🚀 Generación
+
+Esta documentación fue generada automáticamente por **CodeLoom**. 
+Cualquier cambio en las entidades del dominio regenerará esta documentación.

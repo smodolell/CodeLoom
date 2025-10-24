@@ -1,0 +1,29 @@
+﻿FileName:ApplicationDbContext.cs
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure|Data
+
+using Microsoft.EntityFrameworkCore;
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Entities;
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure.Data.Configurations;
+namespace {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure.Data;
+
+public class ApplicationDbContext : DbContext
+{
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+    }
+
+    // DbSets
+    {% for entity in context.EntityNames -%}
+    public DbSet<{{ entity }}> {{ entity }}s { get; set; }
+    {% endfor -%}
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Configurations
+        {% for entity in context.EntityNames -%}
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof({{ entity }}Configuration).Assembly);
+        {% endfor -%}
+        
+        base.OnModelCreating(modelBuilder);
+    }
+}

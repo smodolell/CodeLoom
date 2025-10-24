@@ -1,0 +1,26 @@
+﻿FileName:DATABASE.md
+Paths:docs
+
+# Esquema de Base de Datos
+
+## Diagrama de Relaciones
+
+```mermaid
+erDiagram
+{% for entity in context.Entities %}
+    {{ entity.TableName }} {
+        {% for prop in entity.Properties -%}
+        {% if prop.IsKey %}*{% endif %}{{ prop.Type }} {{ prop.Name }} {% if prop.IsKey %}PK{% elsif prop.IsForeignKey %}FK{% endif %}
+        {% endfor -%}
+    }
+{% endfor %}
+
+{% for rel in context.Relationships -%}
+{% if rel.Type == "OneToMany" -%}
+    {{ rel.FromEntity }} ||--o{ {{ rel.ToEntity }} : "{{ rel.ForeignKey }}"
+{% elsif rel.Type == "ManyToOne" -%}
+    {{ rel.FromEntity }} }o--|| {{ rel.ToEntity }} : "{{ rel.ForeignKey }}"
+{% elsif rel.Type == "OneToOne" -%}
+    {{ rel.FromEntity }} ||--|| {{ rel.ToEntity }} : "{{ rel.ForeignKey }}"
+{% endif -%}
+{% endfor %}

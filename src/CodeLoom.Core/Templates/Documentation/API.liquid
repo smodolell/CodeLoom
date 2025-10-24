@@ -1,0 +1,56 @@
+﻿FileName:API.md
+Paths:docs
+
+# API Endpoints
+
+{% for entity in context.Entities %}
+
+## {{ entity.Name }}
+
+### GET /api/{{ entity.Name | downcase }}
+
+Obtiene todos los registros de {{ entity.Name }}
+
+**Response:**
+```json
+{
+  "data": [
+    {
+{% for prop in entity.Properties -%}
+      "{{ prop.Name }}": "{{ prop.Type | get_json_example }}",
+{% endfor -%}
+    }
+  ],
+  "total": 0
+}
+```
+
+### GET /api/{{ entity.Name | downcase }}/{id}
+
+Obtiene un registro específico por ID.
+
+### POST /api/{{ entity.Name | downcase }}
+
+Crea un nuevo registro.
+
+**Body:**
+```json
+{
+{% for prop in entity.Properties -%}
+{% unless prop.IsKey -%}
+  "{{ prop.Name }}": "{{ prop.Type | get_json_example }}",
+{% endunless -%}
+{% endfor -%}
+}
+```
+
+### PUT /api/{{ entity.Name | downcase }}/{id}
+
+Actualiza un registro existente.
+
+### DELETE /api/{{ entity.Name | downcase }}/{id}
+
+Elimina un registro.
+
+---
+{% endfor %}

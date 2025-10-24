@@ -1,0 +1,18 @@
+﻿FileName:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.WebApi.csproj
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.WebApi
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Application\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Application.csproj" />
+  </ItemGroup>
+</Project>

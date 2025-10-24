@@ -1,0 +1,55 @@
+﻿FileName:{{ context.Name }}Configuration.cs
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure|Data|Configurations
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Entities;
+
+namespace {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure.Data.Configurations;
+
+public class {{ context.Name }}Configuration : IEntityTypeConfiguration<{{ context.Name }}>
+{
+    public void Configure(EntityTypeBuilder<{{ context.Name }}> builder)
+    {
+        builder.ToTable("{{ context.TableName }}");
+        
+        builder.HasKey(e => e.Id);
+        {% for property in context.Properties -%}
+        {% if property.Name != "Id" and property.IsRequired and property.MaxLength.HasValue and property.IsForeignKey == false and property.RelationshipType == "" -%}
+        
+        builder.Property(e => e.{{ property.Name }})
+            .IsRequired(){% if property.MaxLength.HasValue %}
+            .HasMaxLength({{ property.MaxLength }}){% endif %};
+        {% elsif property.Name != "Id" and property.IsRequired and property.IsForeignKey == false and property.RelationshipType == "" -%}
+        
+        builder.Property(e => e.{{ property.Name }})
+            .IsRequired();
+        {% elsif property.Name != "Id" and property.MaxLength.HasValue and property.IsForeignKey == false and property.RelationshipType == "" -%}
+        
+        builder.Property(e => e.{{ property.Name }})
+            .HasMaxLength({{ property.MaxLength }});
+        {% elsif property.Type == "decimal" or property.Type == "decimal?" -%}
+        
+        builder.Property(e => e.{{ property.Name }})
+            .HasColumnType("decimal(18,2)");
+        {% endif -%}
+        {% endfor -%}
+
+        // Relationships
+        {% for relationship in context.Relationships -%}
+        {% if relationship.RelationshipType == "OneToMany" and relationship.MappedBy != "" and relationship.ForeignKey != "" -%}
+        
+        builder.HasMany(e => e.{{ relationship.PropertyName }})
+            .WithOne(e => e.{{ relationship.MappedBy }})
+            .HasForeignKey(e => e.{{ relationship.ForeignKey }})
+            .OnDelete(DeleteBehavior.Restrict);
+        {% elsif relationship.RelationshipType == "ManyToOne" and relationship.ForeignKey != "" and relationship.MappedBy != "" -%}
+        
+        builder.HasOne(e => e.{{ relationship.PropertyName }})
+            .WithMany(e => e.{{ relationship.MappedBy }})
+            .HasForeignKey(e => e.{{ relationship.ForeignKey }})
+            .OnDelete(DeleteBehavior.Restrict);
+        {% endif -%}
+        {% endfor -%}
+    }
+}

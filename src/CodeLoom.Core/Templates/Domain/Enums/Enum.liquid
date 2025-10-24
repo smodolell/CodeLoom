@@ -1,0 +1,11 @@
+﻿FileName:{{ context.Name }}.cs
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain|Enums
+
+namespace {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Enums;
+
+public enum {{ context.Name }}
+{
+    {% for value in context.Values -%}
+    {{ value.Name }} = {{ value.Value }}{% unless forloop.last %},{% endunless %}
+    {% endfor -%}
+}

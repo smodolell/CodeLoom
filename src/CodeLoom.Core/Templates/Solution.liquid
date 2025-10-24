@@ -1,0 +1,50 @@
+﻿FileName:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.sln
+Paths:
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36301.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{{ context.DomainProjectGuid }}") = "{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain", "src\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.csproj", "{{ context.DomainProjectGuid }}"
+EndProject
+Project("{{ context.DomainProjectGuid }}") = "{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Application", "src\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Application\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Application.csproj", "{{ context.ApplicationProjectGuid }}"
+EndProject
+Project("{{ context.InfrastructureProjectGuid }}") = "{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure", "src\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure.csproj", "{{ context.InfrastructureProjectGuid }}"
+EndProject
+Project("{{ context.WebApiProjectGuid }}") = "{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.WebApi", "src\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.WebApi\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.WebApi.csproj", "{{ context.WebApiProjectGuid }}"
+EndProject
+Project("{{ context.TestsProjectGuid }}") = "{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Tests", "tests\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Tests\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Tests.csproj", "{{ context.TestsProjectGuid }}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{{ context.DomainProjectGuid }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{{ context.DomainProjectGuid }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{{ context.DomainProjectGuid }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{{ context.DomainProjectGuid }}.Release|Any CPU.Build.0 = Release|Any CPU
+		{{ context.ApplicationProjectGuid }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{{ context.ApplicationProjectGuid }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{{ context.ApplicationProjectGuid }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{{ context.ApplicationProjectGuid }}.Release|Any CPU.Build.0 = Release|Any CPU
+		{{ context.InfrastructureProjectGuid }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{{ context.InfrastructureProjectGuid }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{{ context.InfrastructureProjectGuid }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{{ context.InfrastructureProjectGuid }}.Release|Any CPU.Build.0 = Release|Any CPU
+		{{ context.WebApiProjectGuid }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{{ context.WebApiProjectGuid }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{{ context.WebApiProjectGuid }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{{ context.WebApiProjectGuid }}.Release|Any CPU.Build.0 = Release|Any CPU
+		{{ context.TestsProjectGuid }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{{ context.TestsProjectGuid }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{{ context.TestsProjectGuid }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{{ context.TestsProjectGuid }}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {{ context.SolutionGuid }}
+	EndGlobalSection
+EndGlobal

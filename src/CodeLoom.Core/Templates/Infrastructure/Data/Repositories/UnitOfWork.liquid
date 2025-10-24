@@ -1,0 +1,75 @@
+﻿FileName:UnitOfWork.cs
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure|Data|Repositories
+
+using Microsoft.EntityFrameworkCore.Storage;
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Common.Interfaces;
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure.Data;
+
+namespace {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure.Data.Repositories;
+
+public class UnitOfWork : IUnitOfWork
+{
+    private readonly ApplicationDbContext _context;
+    private IDbContextTransaction _transaction;
+    private readonly Dictionary<Type, object> _repositories;
+
+    public UnitOfWork(ApplicationDbContext context)
+    {
+        _context = context;
+        _repositories = new Dictionary<Type, object>();
+    }
+
+    public IRepository<T> GetRepository<T>() where T : class
+    {
+        if (_repositories.ContainsKey(typeof(T)))
+        {
+            return (IRepository<T>)_repositories[typeof(T)];
+        }
+
+        var repository = new Repository<T>(_context);
+        _repositories.Add(typeof(T), repository);
+        return repository;
+    }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
+
+    public async Task BeginTransactionAsync()
+    {
+        _transaction = await _context.Database.BeginTransactionAsync();
+    }
+
+    public async Task CommitTransactionAsync()
+    {
+        try
+        {
+            await _context.SaveChangesAsync();
+            await _transaction.CommitAsync();
+        }
+        catch
+        {
+            await RollbackTransactionAsync();
+            throw;
+        }
+        finally
+        {
+            _transaction?.Dispose();
+            _transaction = null;
+        }
+    }
+
+    public async Task RollbackTransactionAsync()
+    {
+        await _transaction.RollbackAsync();
+        _transaction?.Dispose();
+        _transaction = null;
+    }
+
+    public void Dispose()
+    {
+        _transaction?.Dispose();
+        _context?.Dispose();
+    }
+}

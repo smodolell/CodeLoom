@@ -1,0 +1,30 @@
+﻿FileName:ENTITIES.md
+Paths:docs
+
+# Entidades del Dominio
+
+{% for entity in context.Entities %}
+
+## {{ entity.Name }}
+
+**Tabla:** `{{ entity.TableName }}`  
+**Clave Primaria:** `{{ entity.PrimaryKey }}` ({{ entity.KeyType }})
+
+### Propiedades
+
+| Nombre | Tipo | Requerido | Longitud Máx | Descripción |
+|--------|------|-----------|--------------|-------------|
+{% for prop in entity.Properties -%}
+| `{{ prop.Name }}` | `{{ prop.Type }}` | {% if prop.IsRequired %}✅{% else %}❌{% endif %} | {% if prop.MaxLength %}{{ prop.MaxLength }}{% else %}-{% endif %} | {% if prop.IsKey %}**🔑 PK** {% endif %}{% if prop.IsForeignKey %}**🔗 FK → {{ prop.RelatedEntity }}** {% endif %} |
+{% endfor %}
+
+### Relaciones
+
+{% for rel in entity.Relationships -%}
+- **{{ rel.Type }}**: `{{ entity.Name }}` → `{{ rel.ToEntity }}` {% if rel.ForeignKey %}(`{{ rel.ForeignKey }}`){% endif %}
+{% else -%}
+*No hay relaciones definidas*
+{% endfor %}
+
+---
+{% endfor %}

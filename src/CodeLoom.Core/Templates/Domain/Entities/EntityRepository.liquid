@@ -1,0 +1,14 @@
+﻿FileName:I{{ context.Name }}Repository.cs
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain|Repositories|Interfaces
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Common.Interfaces;
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Entities;
+
+namespace {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Repositories.Interfaces;
+
+public interface I{{ context.Name }}Repository : IRepository<{{ context.Name }}>
+{
+    // Métodos específicos para {{ context.Name }} (inteligentes y sin duplicados)
+    {% for method in context.IntelligentRepositoryMethods -%}
+    {{ method.ReturnType }} {{ method.Name }}({% if method.Parameters != "" %}{{ method.Parameters }}{% endif %});
+    {% endfor -%}
+}

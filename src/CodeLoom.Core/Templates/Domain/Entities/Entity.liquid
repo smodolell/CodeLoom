@@ -1,0 +1,34 @@
+﻿FileName:{{ context.Name }}.cs
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain|Entities
+
+
+{% if context.NeedsSystemUsing -%}
+using System;
+{% endif -%}
+using System.Collections.Generic;
+{% if context.NeedsEnumUsing -%}
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Enums;
+{% endif -%}
+
+namespace {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Entities;
+public class {{ context.Name }}
+{
+    {% for property in context.Properties -%}
+    {% if property.IsForeignKey == false and property.RelationshipType == "" -%}
+    public {{ property.Type }} {{ property.Name }} { get; set; }{{ property.PropertyInitializer }}
+    {% endif -%}
+    {% endfor -%}
+
+    // Navigation Properties
+    {% for property in context.Properties -%}
+    {% if property.IsForeignKey or property.RelationshipType != "" -%}
+    {% if property.RelationshipType == "OneToMany" -%}
+    public virtual ICollection<{{ property.RelatedEntity }}> {{ property.Name }} { get; set; } = new List<{{ property.RelatedEntity }}>();
+    {% elsif property.RelationshipType == "ManyToOne" or property.RelationshipType == "OneToOne" -%}
+    public virtual {{ property.RelatedEntity }} {{ property.Name }} { get; set; } = default!;
+    {% elsif property.IsForeignKey -%}
+    public {{ property.Type }} {{ property.Name }} { get; set; }
+    {% endif -%}
+    {% endif -%}
+    {% endfor -%}
+}

@@ -1,0 +1,37 @@
+﻿FileName:{{ context.Name }}Repository.cs
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure|Data|Repositories
+
+using Microsoft.EntityFrameworkCore;
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Entities;
+using {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Repositories.Interfaces;
+
+namespace {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Infrastructure.Data.Repositories;
+
+public class {{ context.Name }}Repository : Repository<{{ context.Name }}>, I{{ context.Name }}Repository
+{
+    public {{ context.Name }}Repository(ApplicationDbContext context) : base(context)
+    {
+    }
+
+    // DEBUG: Métodos inteligentes encontrados: {{ context.IntelligentRepositoryMethods | size }}
+    {% for method in context.IntelligentRepositoryMethods -%}
+    // DEBUG: Procesando método: {{ method.Name }} - Tipo: {{ method.RelationshipType }} - NavProp: {{ method.NavigationProperty }}
+    {% if method.Name == "GetByIdWithDetailsAsync" -%}
+    public async {{ method.ReturnType }} {{ method.Name }}({% if method.Parameters != "" %}{{ method.Parameters }}{% endif %})
+    {
+        return await _context.Set<{{ context.Name }}>()
+            {% for relationship in context.UniqueManyToOneRelationships -%}
+            .Include(e => e.{{ relationship.PropertyName }})
+            {% endfor -%}
+            .FirstOrDefaultAsync(e => e.Id == id);
+    }
+    {% elsif method.Name contains "GetWith" -%}
+    public async {{ method.ReturnType }} {{ method.Name }}({% if method.Parameters != "" %}{{ method.Parameters }}{% endif %})
+    {
+        return await _context.Set<{{ context.Name }}>()
+            .Include(e => e.{{ method.NavigationProperty }})
+            .ToListAsync();
+    }
+    {% endif -%}
+    {% endfor -%}
+}

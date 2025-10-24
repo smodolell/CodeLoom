@@ -1,0 +1,13 @@
+﻿FileName:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Application.csproj
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Application
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain\{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,13 @@
+﻿FileName:IUnitOfWork.cs
+Paths:{{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain|Common|Interfaces
+
+namespace {{ context.NameSpaceBase }}.{{ context.ApplicationName }}.Domain.Common.Interfaces;
+
+public interface IUnitOfWork : IDisposable
+{
+    IRepository<T> GetRepository<T>() where T : class;
+    Task<int> SaveChangesAsync();
+    Task BeginTransactionAsync();
+    Task CommitTransactionAsync();
+    Task RollbackTransactionAsync();
+}
